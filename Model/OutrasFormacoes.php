@@ -1,0 +1,100 @@
+<?php
+
+class OutrasFormacoes
+{
+    // ATRIBUTOS PRIVADOS (Baseado na tabela 'outrasformacoes')
+    private $id;
+    private $idusuario;
+    private $inicio;
+    private $fim;
+    private $descricao;
+
+    // MÉTODOS GETTERS e SETTERS
+    // ID
+    public function setID($id) { $this->id = $id; }
+    public function getID() { return $this->id; }
+
+    // idusuario
+    public function setIdUsuario($idusuario) { $this->idusuario = $idusuario; }
+    public function getIdUsuario() { return $this->idusuario; }
+
+    // inicio
+    public function setInicio($inicio) { $this->inicio = $inicio; }
+    public function getInicio() { return $this->inicio; }
+
+    // fim
+    public function setFim($fim) { $this->fim = $fim; }
+    public function getFim() { return $this->fim; }
+
+    // Descrição
+    public function setDescricao($descricao) { $this->descricao = $descricao; }
+    public function getDescricao() { return $this->descricao; }
+
+    // MÉTODO inserirBD()
+    public function inserirBD()
+    { 
+        require_once 'ConexaoBD.php'; 
+        $con = new ConexaoBD();
+        $conn = $con->conectar();
+        
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        } 
+        
+        // Sentença SQL
+        $sql = "INSERT INTO outrasformacoes (idusuario, inicio, fim, descricao)
+        VALUES ('".$this->idusuario."','".$this->inicio."','".$this->fim."','".$this->descricao."')";
+        
+        if ($conn->query($sql) === true) {
+            $this->id = mysqli_insert_id($conn);
+            $conn->close();
+            return true; 
+        } else  { 
+            $conn->close();
+            return false; 
+        } 
+    } 
+
+    // MÉTODO excluirBD($id)
+    public function excluirBD($id) 
+    { 
+        require_once 'ConexaoBD.php'; 
+        $con = new ConexaoBD();
+        $conn = $con->conectar();
+        
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        } 
+        
+        // Sentença SQL
+        $sql = "DELETE FROM outrasformacoes WHERE idoutrasformacoes = '".$id  ."';";
+        
+        if ($conn->query($sql) === true) {
+            $conn->close();
+            return true; 
+        } else  { 
+            $conn->close();
+            return false;
+        } 
+    } 
+
+    // MÉTODO listaOutrasFormacoes($idusuario)
+    public function listaOutrasFormacoes($idusuario) 
+    { 
+        require_once 'ConexaoBD.php';
+        $con = new ConexaoBD();
+        $conn = $con->conectar();
+        
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        } 
+        
+        // Sentença SQL
+        $sql = "SELECT * FROM outrasformacoes WHERE idusuario =  '".$idusuario."'"  ; 
+        $re = $conn->query($sql);
+        $conn->close();
+        
+        return $re; // Retorna um ou mais registros
+    } 
+}
+?>
